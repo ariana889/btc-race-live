@@ -13,9 +13,9 @@ trade has to be aimed at a move clearly larger than that.
   than `65 bps + 1 sigma` below its 60-bar mean, where sigma is the standard deviation of the last 60
   one-bar returns in bps, and the 240-bar mean has not fallen more than 60 bps over the last 60 bars.
   The second condition keeps the bot out of a slide, where a dip is not a dip but the next leg down.
-- **Exit**: `+95 bps` of profit over the position's cost (fees included), or `-120 bps` (a
-  catastrophe stop far below the dip it bought, since a tight stop sells exactly those lows), or 300
-  bars held.
+- **Exit**: `+95 bps` of profit over the position's cost (fees included), or `-150 bps` (a catastrophe
+  stop far below the dip it bought, since a tight stop sells exactly those lows), or 300 bars held.
+- **Cooldown**: 30 bars after an exit, so a dip that stopped out is not bought straight back.
 - **Size**: 90% of equity, bounded by cash and by 1/50 of the pool depth at the latest close, so an
   order never asks the book for more than it can fill at the price it expects.
 

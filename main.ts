@@ -36,8 +36,10 @@ const TREND_LAG = 60;
 const TREND_DROP_BPS = 60;
 /** Exit: profit target over the position's cost, catastrophe stop, and the longest hold in bars. */
 const TARGET_BPS = 95;
-const STOP_BPS = 120;
+const STOP_BPS = 150;
 const MAX_HOLD_BARS = 300;
+/** Bars to wait after an exit before buying another dip: stops a losing dip from being re-bought into. */
+const COOLDOWN_BARS = 30;
 /** No decision before this many bars: the averages above must be warm and the first minutes are noise. */
 const MIN_BARS = 70;
 /** Equity put at risk per position, in bps of equity. */
@@ -54,6 +56,8 @@ interface Series {
   depths: bigint[];
   /** The bar index the current position was bought at, or -1 while flat. */
   entryIndex: number;
+  /** The bar index of the last bar an exit was decided on (the cooldown counts from it). */
+  exitIndex: number;
   /** The bar index of the last bar folded in. */
   index: number;
 }
@@ -62,7 +66,7 @@ const series = new Map<string, Series>();
 
 function push(state: BarsState, bar: Bar): void {
   let s = series.get(bar.symbol);
-  if (s === undefined) series.set(bar.symbol, (s = { closes: [], depths: [], entryIndex: -1, index: -1 }));
+  if (s === undefined) series.set(bar.symbol, (s = { closes: [], depths: [], entryIndex: -1, exitIndex: -1_000_000, index: -1 }));
   s.closes.push(Number(bar.c));
   // Depth arrives in USDC raw units (10^-6); the quote amounts here are at the capital's own scale.
   const scale = 10n ** BigInt(state.hello.capital.quote_scale);
@@ -165,12 +169,14 @@ await runBars({
       const held = state.positions.get(symbol);
       if (held !== undefined && held.qty > 0n) {
         if (shouldExit(state, symbol, s)) {
+          s.exitIndex = s.index;
           orders.push({ side: 'sell', symbol, qty: held.qty, max_slippage_bps: MAX_SLIPPAGE_BPS });
         }
         continue;
       }
       const bar = state.latest.get(symbol)!;
       if (bar.o === bar.c) continue; // a flat bar means nobody traded: no entry on it
+      if (s.index - s.exitIndex < COOLDOWN_BARS) continue;
       if (!isDip(state, s)) continue;
       const notional = buyNotional(state, symbol, s);
       if (notional === 0n) continue;
