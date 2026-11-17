@@ -35,9 +35,9 @@ const LONG_MA = 240;
 const TREND_LAG = 60;
 const TREND_DROP_BPS = 60;
 /** Exit: profit target over the position's cost, catastrophe stop, and the longest hold in bars. */
-const TARGET_BPS = 85;
+const TARGET_BPS = 95;
 const STOP_BPS = 120;
-const MAX_HOLD_BARS = 240;
+const MAX_HOLD_BARS = 300;
 /** No decision before this many bars: the averages above must be warm and the first minutes are noise. */
 const MIN_BARS = 70;
 /** Equity put at risk per position, in bps of equity. */
