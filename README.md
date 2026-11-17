@@ -36,3 +36,7 @@ same window answer byte for byte.
 `node cli/makefun.mjs grade-local --kit . --bot <repo> --driver process --worktree`: net PnL
 **+15.902640 USDC** over the 1,440-bar dev window, 4 fills (2 round trips), 0 rejected orders, max
 drawdown 0.66%.
+
+[![make.fun · btc-race-24h-20261117-0603](https://make.fun/badge/btc-race-24h-20261117-0603.svg)](https://make.fun/bounty/btc-race-24h-20261117-0603?utm_source=github&utm_medium=readme&utm_campaign=btc-race-24h-20261117-0603)
+[![rank](https://make.fun/badge/btc-race-24h-20261117-0603/ariana889/btc-race-live/rank.svg)](https://make.fun/bounty/btc-race-24h-20261117-0603/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=btc-race-24h-20261117-0603)
+[![reward](https://make.fun/badge/btc-race-24h-20261117-0603/ariana889/btc-race-live/reward.svg)](https://make.fun/bounty/btc-race-24h-20261117-0603?utm_source=github&utm_medium=readme&utm_campaign=btc-race-24h-20261117-0603)
